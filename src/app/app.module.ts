@@ -3,12 +3,17 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
+import { AngularCropperjsModule } from 'angular-cropperjs';
+import { CropperImageComponent } from './cropper-image/cropper-image.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CropperImageComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AngularCropperjsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

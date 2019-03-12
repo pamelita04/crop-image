@@ -1,0 +1,32 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+
+
+    <h1> Choose file and see preview </h1>
+  
+    <!-- <img class="image-rounded" [src]="url" height="200"> -->
+    <input type='file' (change)="onSelectFile($event)">
+    <div class="btn-group btn-group-crop">
+        <button class="btn btn-primary" (click)="save()" type="button">
+          saveeee
+        </button>
+    </div>
+    <br />
+    <br />
+    <angular-cropper #angularCropper (ready)="readyCrop($event)" [cropperOptions]="cropperOptions" [imageUrl]="url" *ngIf="url">
+    </angular-cropper>
+
+    <div style="display:none;">
+        <img id="source" src="" width="300" height="227">
+      </div> -->
+   
+  
+    
+  
+    <p> How to crop the uploaded image and auto resize it? </p>
+  
+    <!-- <canvas id="canvas"></canvas>
+    <div style="display:none;">
+      <img id="source" src="https://mdn.mozillademos.org/files/5397/rhino.jpg" width="300" height="227">
+    </div> -->
+  </div>
