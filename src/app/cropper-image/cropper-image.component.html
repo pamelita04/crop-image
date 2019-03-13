@@ -2,7 +2,7 @@
 <div style="text-align:center">
 
 
-    <h1> Choose file and see preview </h1>
+    <h1>image </h1>
   
     <!-- <img class="image-rounded" [src]="url" height="200"> -->
     <input type='file' (change)="onSelectFile($event)">
@@ -11,9 +11,10 @@
           saveeee
         </button>
     </div>
+    <!-- <div>{{croppedImage}}</div> -->
     <br />
     <br />
-    <angular-cropper #angularCropper (ready)="readyCrop($event)" [cropperOptions]="cropperOptions" [imageUrl]="url" *ngIf="url">
+    <angular-cropper #angularCropper id="my-canvas" (ready)="readyCrop($event)" [cropperOptions]="cropperOptions" [imageUrl]="url" *ngIf="url">
     </angular-cropper>
 
     <div style="display:none;">
