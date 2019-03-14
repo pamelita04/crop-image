@@ -17,6 +17,8 @@ export class CropperImageComponent implements OnInit {
   croppedImage = null;
 
   objectImage: any;
+  nameImage: any;
+  versionBrowser: any;
 
   myImage = null;
   scaleValX = 1;
@@ -45,31 +47,57 @@ export class CropperImageComponent implements OnInit {
       minCropBoxHeight: 450,
 
     };
+
+    console.log("===============cropperOptions===================== ")
   }
 
+  
+
   ngOnInit() {
+    console.log("===============ngOnInit===================== ")
+    this.versionBrowser = this.getBrowser();
+    console.log("versionBrowser-------", this.versionBrowser)
   }
+
+  getBrowser() {
+    let ua = navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []; 
+    if(/trident/i.test(M[1])){
+        tem=/\brv[ :]+(\d+)/g.exec(ua) || []; 
+        return {name:'IE',version:(tem[1]||'')};
+        }   
+    if(M[1]==='Chrome'){
+        tem=ua.match(/\bOPR|Edge\/(\d+)/)
+        if(tem!=null)   {return {name:'Opera', version:tem[1]};}
+        }   
+    M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
+    return {
+      name: M[0],
+      version: M[1]
+    };
+ }
 
   readyCrop(event) {
     console.log("----ready----", event);
     this.resize();
   }
 
-
   onSelectFile(event: any) {
 
-
     if (event.target.files && event.target.files[0]) {
+      console.log("fileSelect", event.target.files[0].name )
+      this.nameImage = event.target.files[0].name 
       if (this.angularCropper) {
         this.reset();
         this.url = '';
       }
-      var reader = new FileReader();
 
       this.objectImage = event.target.files[0];
+      console.log("dataImage===================== ", event.target.files[0])
+    }
 
-      console.log("data===================== ", event.target.files[0].name)
-
+   /*   
+      var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onload = (event: any) => { // called once readAsDataURL is completed
@@ -82,8 +110,7 @@ export class CropperImageComponent implements OnInit {
         image.src = this.url;
         // ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
 
-      }
-    }
+      }*/
 
     // setTimeout(() => {
     //   console.log("timer===========")
@@ -95,6 +122,9 @@ export class CropperImageComponent implements OnInit {
   }
 
   resize() {
+
+    this.angularCropper.cropper.setCropBoxData({ height: 450, width: 800 })
+    this.angularCropper.cropper.crop();
     // new Cropper(image, {
     // ready() {
     // this.cropper[method](argument1, , argument2, ..., argumentN);
@@ -102,9 +132,6 @@ export class CropperImageComponent implements OnInit {
 
     // // Allows chain composition
     // this.angularCropper.cropper.move(1, -1).rotate(45).scale(1, -1);
-    this.angularCropper.cropper.setCropBoxData({ height: 450, width: 800 })
-    this.angularCropper.cropper.crop();
-
     // },
     // });
   }
@@ -119,49 +146,39 @@ export class CropperImageComponent implements OnInit {
     console.log("getImageData", imageData);
     console.log("getData", getDataImage);
     console.log("cropBoxData", cropBoxData);
-
   }
 
   save() {
-    console.log("-----saveeee", this.angularCropper)
+    console.log("-----click saveeee")
     // let croppedImgB64String: string = this.angularCropper.cropper.getCroppedCanvas().toDataURL('image/jpeg', (100 / 100));
     // this.croppedImage = croppedImgB64String;
-    this.resize();
-    let getDataImage = this.angularCropper.cropper.getData();
-    console.log("cropData x:", getDataImage.x, "cropData y:", getDataImage.y);
+
+    // this.resize();
+    // let getDataImage = this.angularCropper.cropper.getData();
+    // console.log("cropData x:", getDataImage.x, "cropData y:", getDataImage.y);
     this.saveImage()
     
     // this.cropperRun()
   }
+
   saveImage() {
+
+    let blob: Blob = new Blob([this.objectImage], { type: 'image/jpg' });
+    let filename = this.objectImage.name;
+    // let disableAutoBOM = true;
+    window.saveAs(blob, filename);
+
     // saveAs(new Blob([this.objectImage], { type: 'jpg' }), 'newImage.pdf');
 
     // let FileSaver  : any = require('file-saver');
     // let file = new Blob([this.objectImage], { type: 'jpg'});
     // FileSaver.saveAs(file, 'newImage.jpg');
 
-
     // let canvas :any = document.getElementById("my-canvas");
     // canvas.toBlob(function(blob) {
     // saveAs(blob, "pretty image.png");
     // });
-
-    let blob: Blob = new Blob([this.objectImage], { type: 'jpg' });
-    let filename = this.objectImage.name;
-    let disableAutoBOM = true;
-    saveAs(blob, filename, disableAutoBOM);
   }
-
-
-
-
-  ngOnChanges() {
-    console.log("--changess----")
-    if (this.angularCropper) {
-
-    }
-  }
-
 
   reset() {
     this.angularCropper.cropper.reset();
@@ -193,7 +210,5 @@ export class CropperImageComponent implements OnInit {
   move(x, y) {
     this.angularCropper.cropper.move(x, y);
   }
-
-
 
 }
